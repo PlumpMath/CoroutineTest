@@ -9,6 +9,8 @@
 #include "coroutine.h"
 #include <stdlib.h>
 
+#define STACK_SIZE 16384
+
 typedef struct CoroutineOpaque {
     // esp must be the first member because inline asm accesses it by offset 0.
     unsigned int esp;
@@ -20,6 +22,22 @@ typedef struct CoroutineOpaque {
 static CoroutineOpaque *current;
 static CoroutineOpaque looper;
 
+#ifdef _MSC_VER
+
+static void __declspec(naked) _switch_to(CoroutineOpaque *from, CoroutineOpaque *to) {
+    __asm {
+        push ebp
+        mov eax, 8[esp]
+        mov [eax], esp
+        mov eax, 12[esp]
+        mov esp, [eax]
+        pop ebp
+        ret
+    };
+}
+
+#else
+
 static void __attribute__ ((naked)) _switch_to(CoroutineOpaque *from, CoroutineOpaque *to) {
     asm ("push %ebp\n"
          "mov 8(%esp), %eax\n"
@@ -30,6 +48,8 @@ static void __attribute__ ((naked)) _switch_to(CoroutineOpaque *from, CoroutineO
          "ret\n"
          );
 }
+
+#endif
 
 static void switch_to_current() {
     _switch_to(&looper, current);
@@ -55,17 +75,17 @@ int cocreate(Coroutine *co, CoFunction f, void *arg) {
         return -2;
     }
     
-    void *stack = (void *)malloc(4096);
+    void *stack = (void *)malloc(STACK_SIZE);
     if (stack == 0) {
         free(obj);
         return -3;
     }
     // 16 bytes alignment for mac
-    *(unsigned int*)(stack + 4096 - 16) = (unsigned int)arg;
-    *(unsigned int*)(stack + 4096 - 20) = (unsigned int)switch_to_looper;
-    *(unsigned int*)(stack + 4096 - 24) = (unsigned int)f;
-    *(unsigned int*)(stack + 4096 - 28) = 0;
-    obj->esp = (unsigned int)stack + 4096 - 28;
+    *(unsigned int*)((char *)stack + STACK_SIZE - 16) = (unsigned int)arg;
+    *(unsigned int*)((char *)stack + STACK_SIZE - 20) = (unsigned int)switch_to_looper;
+    *(unsigned int*)((char *)stack + STACK_SIZE - 24) = (unsigned int)f;
+    *(unsigned int*)((char *)stack + STACK_SIZE - 28) = 0;
+    obj->esp = (unsigned int)stack + STACK_SIZE - 28;
     obj->stack = stack;
     
     if (current == 0) {
