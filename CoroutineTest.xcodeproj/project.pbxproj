@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		F6FC0FDD1DC8F045008C7294 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = F6FC0FDC1DC8F045008C7294 /* main.c */; };
+		F6FC0FE51DC9B3EF008C7294 /* coroutine.c in Sources */ = {isa = PBXBuildFile; fileRef = F6FC0FE41DC9B3EF008C7294 /* coroutine.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,8 @@
 /* Begin PBXFileReference section */
 		F6FC0FD91DC8F045008C7294 /* CoroutineTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CoroutineTest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F6FC0FDC1DC8F045008C7294 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		F6FC0FE31DC9B3DE008C7294 /* coroutine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = coroutine.h; sourceTree = "<group>"; };
+		F6FC0FE41DC9B3EF008C7294 /* coroutine.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = coroutine.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +61,8 @@
 			isa = PBXGroup;
 			children = (
 				F6FC0FDC1DC8F045008C7294 /* main.c */,
+				F6FC0FE31DC9B3DE008C7294 /* coroutine.h */,
+				F6FC0FE41DC9B3EF008C7294 /* coroutine.c */,
 			);
 			path = CoroutineTest;
 			sourceTree = "<group>";
@@ -120,6 +125,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F6FC0FE51DC9B3EF008C7294 /* coroutine.c in Sources */,
 				F6FC0FDD1DC8F045008C7294 /* main.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -217,14 +223,17 @@
 		F6FC0FE11DC8F045008C7294 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				DEVELOPMENT_TEAM = 4VN27XXP2J;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = i386;
 			};
 			name = Debug;
 		};
 		F6FC0FE21DC8F045008C7294 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				DEVELOPMENT_TEAM = 4VN27XXP2J;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
